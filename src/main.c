@@ -64,6 +64,11 @@ int main(void)
   // Enable internal pull-up (PF1).
   GPIO_PORTF_PUR_R = 0x11;
 
+  // Setup debounce timer
+
+  
+
+
 
   // Loop forever.
   while(1)
