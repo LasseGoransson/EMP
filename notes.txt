@@ -1,0 +1,2 @@
+Timer init
+http://users.ece.utexas.edu/~valvano/arm/Timer0A.c
