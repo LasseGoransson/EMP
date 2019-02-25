@@ -1,3 +1,4 @@
+#define NVIC_EN0_INT19          0x00080000  // Interrupt 19 enable
 #define TIMER_CFG_16_BIT        0x00000004  // 16-bit timer configuration,
                                             // function is controlled by bits
                                             // 1:0 of GPTMTAMR and GPTMTBMR

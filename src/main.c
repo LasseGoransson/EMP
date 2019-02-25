@@ -44,7 +44,7 @@ int main(void)
   enable_global_int();
 
 
-  int auto_mode = 0;
+  int auto_mode = 1;
   int dummy;
 
   // Enable the GPIO port that is used for the on-board LED.
