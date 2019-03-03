@@ -36,7 +36,6 @@ void systick_handler(void)
 {
   // Hardware clears systick int reguest
   ticks++;
-  btn_timestamp--;
 }
 
 

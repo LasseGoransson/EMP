@@ -7,6 +7,7 @@ void counter_auto_mode(void)
 {
   int ticks = getCountTicks();
 
+
   int choice = ticks % 8;
 
   if (choice == 0)
