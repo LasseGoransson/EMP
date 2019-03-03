@@ -23,13 +23,12 @@
 #include "emp_type.h"
 #include "systick.h"
 #include "counter_handeling.h"
-//#include "timer0.h"
+#include "libRGB.h"
 
 /*****************************    Defines    *******************************/
 /*****************************   Constants   *******************************/
 /*****************************   Variables   *******************************/
 /*****************************   Functions   *******************************/
-
 
 
 int main(void)
@@ -65,19 +64,91 @@ int main(void)
   // Enable internal pull-up (PF1).
   GPIO_PORTF_PUR_R = 0x11;
 
+  int current_color = 0; // Current color to display
+  extern int btn_timestamp;
 
   // Loop forever.
   while(1)
   {
+        /*
+      switch (current_color)
+      {
+        case 0:
+          set_LED_off();
+        break;
+        case 1:
+          set_LED_Color(LED_COLOR_GREEN);
+        break;
+        case 2:
+          set_LED_Color(LED_COLOR_BLUE);
+        break;
+        case 3:
+          set_LED_Color(LED_COLOR_CYAN);
+        break;
+        case 4:
+        set_LED_Color(LED_COLOR_RED);
+        break;
+        case 5:
+          set_LED_Color(LED_COLOR_YELLOW);
+        break;
+        case 6:
+          set_LED_Color(LED_COLOR_MANGENTA);
+        break;
+        case 7:
+          set_LED_Color(LED_COLOR_WHITE);
+        break;
+      }
+      */
 
-    if( GPIO_PORTF_DATA_R & 0x10 ) // 0x10 = SW 1
+    // Button check
+    if( GPIO_PORTF_DATA_R & 0x10 )
     {
-      GPIO_PORTF_DATA_R &= ~(0x02);
+      // Not pressed
     }
-    else{
-      GPIO_PORTF_DATA_R |= 0x02;
+    else
+    {
+      // Pressed
+
+      // Do the debounce dance !
+      if (btn_timestamp == 0)
+      {
+        set_LED_Color(LED_COLOR_BLUE);
+        //current_color++;
+        // Enable input ignore
+        btn_timestamp = 2;
+      }
+      else
+      {
+        set_LED_Color(LED_COLOR_RED);
+      }
+
+
+
+
     }
-}
+    if (btn_timestamp <= 0)
+    {
+      btn_timestamp = 0;
+      set_LED_Color(LED_COLOR_BLUE);
+    }
+    else
+    {
+
+    }
+
+
+
+
+    if (current_color >= 7)
+    {
+      current_color = 0;
+    }
+
+
+
+
+
+  }
 
   return( 0 );
 }

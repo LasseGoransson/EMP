@@ -50,8 +50,6 @@ void init_systick();
 *   Function : Initialize the systick interrupt.
 ******************************************************************************/
 
-
+void systick_handler(void);
 /****************************** End Of Module *******************************/
 #endif
-
-

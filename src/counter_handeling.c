@@ -11,51 +11,52 @@ void counter_auto_mode(void)
 
   if (choice == 0)
   {
-    GPIO_PORTF_DATA_R &= ~(0x0E);;
+    GPIO_PORTF_DATA_R &= ~(0x0E); // Off
   }
 
   if (choice == 1)
   {
-    GPIO_PORTF_DATA_R|=(0x08);
+    GPIO_PORTF_DATA_R|=(0x08); // Green
   }
 
 
   if (choice == 2)
   {
-    GPIO_PORTF_DATA_R |=(0x04); // 1100
+    GPIO_PORTF_DATA_R |=(0x04); // Blue
   }
 
 
   if (choice == 3)
   {
-    GPIO_PORTF_DATA_R |=(0x0c); // 1100
+    GPIO_PORTF_DATA_R |=(0x0c); // Cyan
   }
 
 
   if (choice == 4)
   {
-    GPIO_PORTF_DATA_R |=(0x02); // 1100
+    GPIO_PORTF_DATA_R |=(0x02); // Red
   }
 
 
   if (choice == 5)
   {
-    GPIO_PORTF_DATA_R |=(0x09); // 1100
+    GPIO_PORTF_DATA_R |=(0x09); // Yellow
   }
 
 
   if (choice == 6)
   {
-    GPIO_PORTF_DATA_R |=(0x06); // 1100
+    GPIO_PORTF_DATA_R |=(0x06); // Magenta
   }
 
 
   if (choice == 7)
   {
-    GPIO_PORTF_DATA_R |= (0x0E); // 1100
+    GPIO_PORTF_DATA_R |= (0x0E); // White
   }
 
-  GPIO_PORTF_DATA_R &= ~(0x0E);
+
+  GPIO_PORTF_DATA_R &= ~(0x0E); // Off
 
 
 

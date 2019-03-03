@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include "inc/hw_nvic.h"
 #include "inc/hw_types.h"
+#include "systick.h"
 
 //*****************************************************************************
 //
@@ -36,6 +37,7 @@ void ResetISR(void);
 static void NmiSR(void);
 static void FaultISR(void);
 static void IntDefaultHandler(void);
+
 
 //*****************************************************************************
 //
@@ -78,7 +80,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // Debug monitor handler
     0,                                      // Reserved
     IntDefaultHandler,                      // The PendSV handler
-    IntDefaultHandler,                                   // The SysTick handler
+    systick_handler,                        // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
     IntDefaultHandler,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
