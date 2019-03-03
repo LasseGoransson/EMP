@@ -23,7 +23,7 @@
 #include "emp_type.h"
 #include "systick.h"
 #include "counter_handeling.h"
-#include "timer0.c"
+//#include "timer0.h"
 
 /*****************************    Defines    *******************************/
 /*****************************   Constants   *******************************/
@@ -44,7 +44,7 @@ int main(void)
   enable_global_int();
 
 
-  int auto_mode = 1;
+  int auto_mode = 0;
   int dummy;
 
   // Enable the GPIO port that is used for the on-board LED.
@@ -65,19 +65,19 @@ int main(void)
   // Enable internal pull-up (PF1).
   GPIO_PORTF_PUR_R = 0x11;
 
-  // Setup debounce timer
-
-
-
-
 
   // Loop forever.
   while(1)
   {
-    if (auto_mode == 1)
+
+    if( GPIO_PORTF_DATA_R & 0x10 ) // 0x10 = SW 1
     {
-      counter_auto_mode();
+      GPIO_PORTF_DATA_R &= ~(0x02);
     }
-  }
+    else{
+      GPIO_PORTF_DATA_R |= 0x02;
+    }
+}
+
   return( 0 );
 }

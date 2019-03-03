@@ -4,7 +4,7 @@
 
 
 
-#define SYSTICK_RELOAD_VALUE 160000             // 5 mS
+#define SYSTICK_RELOAD_VALUE  80000*200            // 5 mS
 
 // Missing definitions in tm4c123gh6pm.h file
 #define NVIC_INT_CTRL_PEND_SYST   0x04000000    // Pend a systick int
