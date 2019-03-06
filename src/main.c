@@ -27,7 +27,102 @@
 /*****************************    Defines    *******************************/
 /*****************************   Constants   *******************************/
 /*****************************   Variables   *******************************/
+extern INT16S ticks;
+int btn_timeout = 0;
+int combinationState = 0;
 /*****************************   Functions   *******************************/
+
+int check_btn_event(void)
+{
+  // SW 1
+  if(!( GPIO_PORTF_DATA_R & 0x10) && (ticks - btn_timeout > 100))
+  {
+    btn_timeout = ticks;
+    //set_LED_Color(LED_COLOR_RED);
+    return 1;
+  }
+  // SW 2
+  if(!( GPIO_PORTF_DATA_R & 0x01) && (ticks - btn_timeout > 100))
+  {
+    btn_timeout = ticks;
+  //  set_LED_Color(LED_COLOR_RED);
+    return 2;
+  }
+  return 0;
+}
+
+int check_combination(int btn_event, int combinationState)
+{
+  switch (combinationState)
+  {
+    case 0:
+      if (btn_event == 1)
+      {
+        combinationState++;
+
+      }
+      else if (btn_event == 2)
+      {
+        combinationState = 0;
+      }
+
+      break;
+    case 1:
+      if (btn_event == 2)
+      {
+        combinationState++;
+
+      }
+      else if (btn_event == 1)
+      {
+        combinationState = 0;
+      }
+      break;
+    case 2:
+      if (btn_event == 2)
+      {
+        combinationState++;
+
+      }
+      else if (btn_event == 1)
+      {
+        combinationState = 0;
+      }
+      break;
+    case 3:
+      if (btn_event == 1)
+      {
+        combinationState++;
+
+      }
+      else if (btn_event == 2)
+      {
+        combinationState = 0;
+      }
+      break;
+    case 4:
+      if (btn_event == 2)
+      {
+        combinationState++;
+
+      }
+      else if (btn_event == 1)
+      {
+        combinationState = 0;
+      }
+      break;
+    case 5:
+      if (btn_event >0)
+      {
+        combinationState = 0;
+      }
+      break;
+  }
+  return combinationState;
+}
+
+
+
 
 
 int main(void)
@@ -62,13 +157,32 @@ int main(void)
 
   // Enable internal pull-up (PF1).
   GPIO_PORTF_PUR_R = 0x11;
-  
-  extern INT16S ticks;
 
+
+
+  combinationState = 0;
 
   // Loop forever.
   while(1)
   {
+
+    set_LED_off();
+    int btn_event = check_btn_event(); // Get current btn state
+    combinationState = check_combination(btn_event,combinationState);
+
+    switch (combinationState) {
+      case 0:
+      //set_LED_off();
+      set_LED_Color(LED_COLOR_RED);
+      break;
+
+      case 5:
+        set_LED_Color(LED_COLOR_GREEN);
+      break;
+    }
+
+
+
 
   }
 
