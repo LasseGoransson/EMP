@@ -33,7 +33,7 @@
 
 /*****************************   Constants   *******************************/
 /*****************************   Variables   *******************************/
-//extern INT16S ticks;
+extern INT16S ticks;
 INT8U btn_event = BE_NO_EVENT;
 
 /*****************************   Functions   *******************************/
@@ -67,16 +67,7 @@ void init_gpio(void)
   GPIO_PORTF_PUR_R = 0x11;
 }
 
-volatile INT16S ticks = 0;
 
-void systick_handler(void)
-/*****************************************************************************
-*   Function : See module specification (.h-file).
-*****************************************************************************/
-{
-  // Hardware clears systick int reguest
-  ticks++;
-}
 
 int main(void)
 /*****************************************************************************
@@ -93,13 +84,13 @@ int main(void)
 
 
 INT8U alive_timer = TIM_500_MSEC;
-int on=0;
+
   // Loop forever.
   while(1)
   {
 
     // wait while ticks are 0;
-    while( !ticks );
+    while( !get_ticks() );
 
     // Remove a tick
     ticks--;
@@ -107,24 +98,19 @@ int on=0;
     if( ! --alive_timer )
     {
       alive_timer        = TIM_500_MSEC;
-      GPIO_PORTD_DATA_R ^= 0x40;
-    }
-
-    if (button_pressed())
-    {
-        //set_LED_Color(LED_COLOR_RED);
-    }
-    else
-    {
-      //set_LED_Color(LED_COLOR_GREEN);
+      GPIO_PORTD_DATA_R ^= 0x40; // Blink EMP board status LED
     }
 
 
+
+    // MAIN APPLICATION
    btn_event = get_btn_event();
 
 
-
     // Call tasks;
+
+
+// DUMMY BTN SHOW CASE
     switch (btn_event) {
       case BE_SINGLE_PRESS:
       set_LED_Color(LED_COLOR_BLUE);

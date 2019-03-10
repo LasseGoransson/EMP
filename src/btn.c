@@ -24,7 +24,6 @@ INT8U get_btn_event(void)
   switch(bs_state)
   {
     case BS_IDLE:
-  //set_LED_Color(LED_COLOR_GREEN);
       // Path to First_press
       if (button_pressed())
       {
@@ -33,7 +32,6 @@ INT8U get_btn_event(void)
       }
       break;
     case BS_FIRST_PRESS:
-    //set_LED_Color(LED_COLOR_RED);
       // Path to Long_press
       if (!(--btn_timer))
       {
@@ -48,7 +46,6 @@ INT8U get_btn_event(void)
       }
       break;
     case BS_FIRST_RELEASE:
-    //set_LED_Color(LED_COLOR_CYAN);
       // Path to BS_IDLE
       if (!(--btn_timer))
       {

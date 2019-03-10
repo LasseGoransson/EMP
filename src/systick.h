@@ -49,7 +49,6 @@ void init_systick();
 *   Output   : -
 *   Function : Initialize the systick interrupt.
 ******************************************************************************/
-
-void systick_handler(void);
+int get_ticks(void);
 /****************************** End Of Module *******************************/
 #endif

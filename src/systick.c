@@ -12,7 +12,20 @@
 
 #define SYSTICK_PRIORITY    0x7E
 
+volatile INT16S ticks = 0;
 
+void systick_handler(void)
+/*****************************************************************************
+*   Function : See module specification (.h-file).
+*****************************************************************************/
+{
+  // Hardware clears systick int reguest
+  ticks++;
+}
+int get_ticks(void)
+{
+  return ticks;
+}
 
 
 void enable_global_int()
