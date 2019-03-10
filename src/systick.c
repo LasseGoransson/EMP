@@ -4,7 +4,7 @@
 
 
 
-#define SYSTICK_RELOAD_VALUE  80000            // 1*n ms
+#define SYSTICK_RELOAD_VALUE 80000              // 5 mS
 
 // Missing definitions in tm4c123gh6pm.h file
 #define NVIC_INT_CTRL_PEND_SYST   0x04000000    // Pend a systick int
@@ -12,31 +12,7 @@
 
 #define SYSTICK_PRIORITY    0x7E
 
-volatile INT16S ticks = 0;
-volatile int btn_timestamp = 0;
 
-
-
-void countup(void)
-{
-  ticks++;
-}
-
-int getCountTicks(void)
-{
-  return ticks;
-}
-
-
-
-void systick_handler(void)
-/*****************************************************************************
-*   Function : See module specification (.h-file).
-*****************************************************************************/
-{
-  // Hardware clears systick int reguest
-  ticks++;
-}
 
 
 void enable_global_int()

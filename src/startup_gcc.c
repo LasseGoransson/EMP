@@ -38,6 +38,7 @@ static void NmiSR(void);
 static void FaultISR(void);
 static void IntDefaultHandler(void);
 
+void systick_handler(void);
 
 //*****************************************************************************
 //

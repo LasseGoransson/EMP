@@ -10,6 +10,10 @@
   #define LED_COLOR_WHITE  0x0E
 
 
+void led_setup(void);
+void set_LED_Color(int color);
+void set_LED_off(void);
+
 
 
   /****************************** End Of Module *******************************/

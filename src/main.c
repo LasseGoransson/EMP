@@ -23,107 +23,60 @@
 #include "emp_type.h"
 #include "systick.h"
 #include "libRGB.h"
+#include "btn.h"
+#include "swtimers.h"
 
 /*****************************    Defines    *******************************/
+
+
+
+
 /*****************************   Constants   *******************************/
 /*****************************   Variables   *******************************/
-extern INT16S ticks;
-int btn_timeout = 0;
-int combinationState = 0;
+//extern INT16S ticks;
+INT8U btn_event = BE_NO_EVENT;
+
 /*****************************   Functions   *******************************/
 
-int check_btn_event(void)
+void init_gpio(void)
+/*****************************************************************************
+*   Input    :
+*   Output   :
+*   Function : The super loop.
+******************************************************************************/
 {
-  // SW 1
-  if(!( GPIO_PORTF_DATA_R & 0x10) && (ticks - btn_timeout > 100))
-  {
-    btn_timeout = ticks;
-    //set_LED_Color(LED_COLOR_RED);
-    return 1;
-  }
-  // SW 2
-  if(!( GPIO_PORTF_DATA_R & 0x01) && (ticks - btn_timeout > 100))
-  {
-    btn_timeout = ticks;
-  //  set_LED_Color(LED_COLOR_RED);
-    return 2;
-  }
-  return 0;
+  int dummy;
+
+  // Enable the GPIO port that is used for the on-board LED.
+  SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOD | SYSCTL_RCGC2_GPIOF;
+
+  // Do a dummy read to insert a few cycles after enabling the peripheral.
+  dummy = SYSCTL_RCGC2_R;
+
+  // Set the direction as output (PF1, PF2 and PF3).
+  GPIO_PORTF_DIR_R = 0x0E;
+  // Set the direction as output (PD6).
+  GPIO_PORTD_DIR_R = 0x40;
+
+  // Enable the GPIO pins for digital function (PF0, PF1, PF2, PF3, PF4).
+  GPIO_PORTF_DEN_R = 0x1F;
+  // Enable the GPIO pins for digital function (PD6).
+  GPIO_PORTD_DEN_R = 0x40;
+
+  // Enable internal pull-up (PF0 and PF4).
+  GPIO_PORTF_PUR_R = 0x11;
 }
 
-int check_combination(int btn_event, int combinationState)
+volatile INT16S ticks = 0;
+
+void systick_handler(void)
+/*****************************************************************************
+*   Function : See module specification (.h-file).
+*****************************************************************************/
 {
-  switch (combinationState)
-  {
-    case 0:
-      if (btn_event == 1)
-      {
-        combinationState++;
-
-      }
-      else if (btn_event == 2)
-      {
-        combinationState = 0;
-      }
-
-      break;
-    case 1:
-      if (btn_event == 2)
-      {
-        combinationState++;
-
-      }
-      else if (btn_event == 1)
-      {
-        combinationState = 0;
-      }
-      break;
-    case 2:
-      if (btn_event == 2)
-      {
-        combinationState++;
-
-      }
-      else if (btn_event == 1)
-      {
-        combinationState = 0;
-      }
-      break;
-    case 3:
-      if (btn_event == 1)
-      {
-        combinationState++;
-
-      }
-      else if (btn_event == 2)
-      {
-        combinationState = 0;
-      }
-      break;
-    case 4:
-      if (btn_event == 2)
-      {
-        combinationState++;
-
-      }
-      else if (btn_event == 1)
-      {
-        combinationState = 0;
-      }
-      break;
-    case 5:
-      if (btn_event >0)
-      {
-        combinationState = 0;
-      }
-      break;
-  }
-  return combinationState;
+  // Hardware clears systick int reguest
+  ticks++;
 }
-
-
-
-
 
 int main(void)
 /*****************************************************************************
@@ -134,54 +87,57 @@ int main(void)
 {
   disable_global_int();
   init_systick();
+  init_gpio();
   enable_global_int();
 
 
 
-  int dummy;
-
-  // Enable the GPIO port that is used for the on-board LED.
-  SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF;
-
-  // Do a dummy read to insert a few cycles after enabling the peripheral.
-  dummy = SYSCTL_RCGC2_R;
-
-  GPIO_PORTF_LOCK_R = 0x4C4F434B;  // Unlock the CR register
-  GPIO_PORTF_CR_R   = 0xFF;        // Enable overwrite of PUR to FP0
-
-  // Set the direction as output (PF1).
-  GPIO_PORTF_DIR_R = 0x0E;
-
-  // Enable the GPIO pins for digital function (PF0 and PF1).
-  GPIO_PORTF_DEN_R = 0x1F;
-
-  // Enable internal pull-up (PF1).
-  GPIO_PORTF_PUR_R = 0x11;
-
-
-
-  combinationState = 0;
-
+INT8U alive_timer = TIM_500_MSEC;
+int on=0;
   // Loop forever.
   while(1)
   {
 
-    set_LED_off();
-    int btn_event = check_btn_event(); // Get current btn state
-    combinationState = check_combination(btn_event,combinationState);
+    // wait while ticks are 0;
+    while( !ticks );
 
-    switch (combinationState) {
-      case 0:
-      //set_LED_off();
-      set_LED_Color(LED_COLOR_RED);
-      break;
+    // Remove a tick
+    ticks--;
 
-      case 5:
-        set_LED_Color(LED_COLOR_GREEN);
-      break;
+    if( ! --alive_timer )
+    {
+      alive_timer        = TIM_500_MSEC;
+      GPIO_PORTD_DATA_R ^= 0x40;
+    }
+
+    if (button_pressed())
+    {
+        //set_LED_Color(LED_COLOR_RED);
+    }
+    else
+    {
+      //set_LED_Color(LED_COLOR_GREEN);
     }
 
 
+   btn_event = get_btn_event();
+
+
+
+    // Call tasks;
+    switch (btn_event) {
+      case BE_SINGLE_PRESS:
+      set_LED_Color(LED_COLOR_BLUE);
+      break;
+      case BE_DOBBELT_PRESS:
+      set_LED_Color(LED_COLOR_WHITE);
+      break;
+      case BE_LONG_PRESS:
+      set_LED_Color(LED_COLOR_GREEN);
+      break;
+      default:
+        break;
+    }
 
 
   }
