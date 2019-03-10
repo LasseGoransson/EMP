@@ -9,6 +9,13 @@
   #define LED_COLOR_MANGENTA 0x06
   #define LED_COLOR_WHITE  0x0E
 
+  #define TRAFFIC_GREEN 0x0C
+  #define TRAFFIC_YELLOW 0x0A
+  #define TRAFFIC_RED 0x06
+  #define TRAFFIC_RED_YELLOW 0x02
+  #define TRAFFIC_OFF 0x0E
+
+
 
 void led_setup(void);
 void set_LED_Color(int color);

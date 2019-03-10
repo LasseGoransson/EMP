@@ -1,6 +1,7 @@
 
 
 #include "libRGB.h"
+#include "emp_type.h"
 #include "stdint.h"
 #include "tm4c123gh6pm.h"
 

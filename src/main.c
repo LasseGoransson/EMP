@@ -25,6 +25,7 @@
 #include "libRGB.h"
 #include "btn.h"
 #include "swtimers.h"
+#include "traffic_light.h"
 
 /*****************************    Defines    *******************************/
 
@@ -33,8 +34,8 @@
 
 /*****************************   Constants   *******************************/
 /*****************************   Variables   *******************************/
-extern INT16S ticks;
-INT8U btn_event = BE_NO_EVENT;
+extern INT8U ticks;
+INT8U btn_event;
 
 /*****************************   Functions   *******************************/
 
@@ -104,26 +105,12 @@ INT8U alive_timer = TIM_500_MSEC;
 
 
     // MAIN APPLICATION
-   btn_event = get_btn_event();
-
-
     // Call tasks;
+     btn_event = get_btn_event();
+     run_traffic_light(btn_event);
 
 
-// DUMMY BTN SHOW CASE
-    switch (btn_event) {
-      case BE_SINGLE_PRESS:
-      set_LED_Color(LED_COLOR_BLUE);
-      break;
-      case BE_DOBBELT_PRESS:
-      set_LED_Color(LED_COLOR_WHITE);
-      break;
-      case BE_LONG_PRESS:
-      set_LED_Color(LED_COLOR_GREEN);
-      break;
-      default:
-        break;
-    }
+
 
 
   }
