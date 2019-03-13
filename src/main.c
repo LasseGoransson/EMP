@@ -25,7 +25,7 @@
 #include "libRGB.h"
 #include "btn.h"
 #include "swtimers.h"
-#include "traffic_light.h"
+
 
 /*****************************    Defines    *******************************/
 
@@ -107,7 +107,7 @@ INT8U alive_timer = TIM_500_MSEC;
     // MAIN APPLICATION
     // Call tasks;
      btn_event = get_btn_event();
-     run_traffic_light(btn_event);
+    
 
 
 
